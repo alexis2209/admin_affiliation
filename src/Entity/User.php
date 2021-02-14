@@ -215,7 +215,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     public function getAvatarUrl($size){
-        return "https://api.adorable.io/avatars/$size/".$this->username;
+        return "";
     }
 
 
@@ -352,7 +352,7 @@ class User implements UserInterface, EquatableInterface
     public function isEqualTo(UserInterface $user)
     {
         if ($user instanceof User)
-        return $this->isValid() && !$this->isDeleted() && $this->getPassword() == $user->getPassword() && $this->getUsername() == $user->getUsername()
-            && $this->getEmail() == $user->getEmail() ;
+            return $this->isValid() && !$this->isDeleted() && $this->getPassword() == $user->getPassword() && $this->getUsername() == $user->getUsername()
+                && $this->getEmail() == $user->getEmail() ;
     }
 }

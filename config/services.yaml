@@ -7,6 +7,11 @@ parameters:
     locale: 'en'
     app_locales: en|fr
 
+    rabbitmq_host: 'localhost'
+    rabbitmq_user: 'guest'
+    rabbitmq_password: 'guest'
+    rabbitmq_statuslayer_vhost: 'affiliation'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -35,3 +40,64 @@ services:
 
     App\EventSubscriber\RedirectToLocaleSubscriber:
         arguments: ['@router', '%app_locales%', '%locale%']
+
+    app.services.supervisord.xmlrpc:
+        class: App\Services\Supervisord\XmlRpcService
+
+    app.route.loader:
+        class: App\Routing\ExtraLoader
+        tags: ['routing.loader']
+        arguments:
+            - '@App\Repository\ProductRepository'
+            - '@App\Repository\CategorieRepository'
+            - '@App\Repository\BlogPostRepository'
+
+    App\Producer\DownloadFiles: '@old_sound_rabbit_mq.download_files_producer'
+    App\Producer\ParseFiles: '@old_sound_rabbit_mq.parse_files_producer'
+    App\Producer\CheckProducts: '@old_sound_rabbit_mq.check_products_producer'
+    App\Producer\CreateProducts: '@old_sound_rabbit_mq.create_products_producer'
+    App\Producer\UpdateProducts: '@old_sound_rabbit_mq.update_products_producer'
+
+    download_service:
+        class: App\Consumer\DownloadService
+
+    parse_service:
+        class: App\Consumer\ParseService
+        arguments:
+            - '@App\Repository\WebsiteRepository'
+            - '@App\Repository\ProductRepository'
+
+    checkproduct_service:
+        class: App\Consumer\CheckProductService
+        arguments:
+            - '@App\Repository\ProductRepository'
+            - '@App\Repository\CategoriesImportRepository'
+            - '@App\Repository\ImportRepository'
+
+    updateproduct_service:
+        class: App\Consumer\UpdateProductService
+
+    createproduct_service:
+        class: App\Consumer\CreateProductService
+        arguments:
+            - '@App\Repository\ProductRepository'
+            - '@App\Repository\ProductDetailsRepository'
+            - '@App\Repository\WebsiteRepository'
+            - '@App\Repository\BrandRepository'
+            - '@App\Repository\CategorieRepository'
+
+    lsportsfixture_service:
+        class: App\Consumer\LSportsFixtureService
+        arguments:
+            - '@App\Repository\FixtureRepository'
+
+    lsportsbet_service:
+        class: App\Consumer\LSportsBetService
+        arguments:
+            - '@App\Repository\BetRepository'
+
+    archive_bet_service:
+        class: App\Command\ArchiveBetsCommand
+        arguments:
+            - '@App\Repository\BetRepository'
+            - '@App\Repository\ArchiveBetRepository'

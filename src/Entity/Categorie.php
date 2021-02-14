@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=CategorieRepository::class)
@@ -27,6 +28,34 @@ class Categorie
      * @Assert\NotBlank()
      */
     private $libelle;
+
+    /**
+     * @ORM\Column(type="string", length=255,unique=true)
+     * @Gedmo\Slug(fields={"libelle"})
+     */
+    private $slug;
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @ORM\Column(type="text", length=65535)
+     * @Assert\NotBlank()
+     */
+    private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="categories")
@@ -75,6 +104,24 @@ class Categorie
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+
 
     public function getCategorieParente(): ?self
     {

@@ -26,6 +26,18 @@ class CategorieRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 
+    public function getMainCateg()
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.CategorieParente IS NULL')
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
     // /**
     //  * @return Categorie[] Returns an array of Categorie objects
     //  */

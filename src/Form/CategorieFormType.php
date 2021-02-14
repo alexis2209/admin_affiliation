@@ -6,6 +6,7 @@ use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,6 +21,10 @@ class CategorieFormType extends AbstractType
     {
         $builder
             ->add('libelle')
+            ->add('content',TextareaType::class,[
+                "label"=>"Contenu",
+                "attr"=>["class"=>"summernote","rows"=>"6"]
+            ])
             ->add('CategorieParente',EntityType::class,[
                 "class"=>Categorie::class,
                 "query_builder"=>function(CategorieRepository $categorieRepository){

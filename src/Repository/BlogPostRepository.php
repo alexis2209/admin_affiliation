@@ -43,22 +43,70 @@ class BlogPostRepository extends ServiceEntityRepository
         return $blogPost;
     }
 
-    // /**
-    //  * @return BlogPost[] Returns an array of BlogPost objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    /**
+    * @return BlogPost[] Returns an array of BlogPost objects
     */
+    public function getBlogList($filters = [])
+    {
+        $select = $this->createQueryBuilder('b')
+            ->select(['b.id', 'b.titre AS title', 'b.blogImage as image', 'b.createdAt as date', 'b.slug', 'b.content', 'c.content', 'c.slug AS slugCateg', 'c.libelle AS libCateg'])
+            ->join('b.categories', 'c')
+            //->andWhere('b.exampleField = :val')
+            //->setParameter('val', $value)
+            ->orderBy('b.id', 'ASC')
+            ->setMaxResults(10);
+
+        if (!empty($filters)){
+            $i = 0;
+            foreach ($filters as $key => $filter){
+                $select->andWhere('b.'.$key.' = :param'.$i)
+                    ->setParameter('param'.$i, $filter);
+                $i++;
+            }
+        }
+
+        $res = $select->getQuery()
+            ->getResult();
+
+        $i = 0;
+        foreach ($res as $temp){
+            $res[$i]['categories'] = [$res[$i]['libCateg']];
+            $res[$i]['date'] = $res[$i]['date']->format('Y-m-d');
+            $res[$i]['slug'] = "blog/" . $res[$i]['slugCateg'] . '/' . $res[$i]['slug'];
+            $res[$i]['slugCateg'] = "blog/" . $res[$i]['slugCateg'];
+            $i++;
+        }
+        return $res;
+    }
+
+
+    /**
+     * @return BlogPost[] Returns an array of BlogPost objects
+     */
+    public function getBlogPost()
+    {
+        $select = $this->createQueryBuilder('b')
+            ->select(['b.id', 'b.titre AS title', 'b.blogImage as image', 'b.createdAt as date', 'b.slug', 'b.content', 'c.content', 'c.slug AS slugCateg', 'c.libelle AS libCateg'])
+            ->join('b.categories', 'c')
+            //->andWhere('b.exampleField = :val')
+            //->setParameter('val', $value)
+            ->orderBy('b.id', 'ASC')
+            ->setMaxResults(10);
+
+        $res = $select->getQuery()
+            ->getResult();
+
+        $i = 0;
+        foreach ($res as $temp){
+            $res[$i]['categories'] = [$res[$i]['libCateg']];
+            $res[$i]['date'] = $res[$i]['date']->format('Y-m-d');
+            $res[$i]['slug'] = "blog/" . $res[$i]['slugCateg'] . '/' . $res[$i]['slug'];
+            $res[$i]['slugCateg'] = "blog/" . $res[$i]['slugCateg'];
+            $i++;
+        }
+        return $res;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?BlogPost

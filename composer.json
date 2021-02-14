@@ -6,6 +6,10 @@
         "ext-ctype": "*",
         "ext-gd": "^7.4",
         "ext-iconv": "*",
+        "emag-tech-labs/rabbitmq-bundle": "^2.4",
+        "friendsofsymfony/rest-bundle": "^3.0",
+        "ihor/supervisor-xml-rpc": "^0.2.1",
+        "jms/serializer-bundle": "^3.7",
         "knplabs/knp-paginator-bundle": "^5.2",
         "liip/imagine-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.5",
@@ -21,6 +25,7 @@
         "symfony/framework-bundle": "5.1.*",
         "symfony/mailer": "5.1.*",
         "symfony/orm-pack": "^1.0",
+        "symfony/routing": "5.1.*",
         "symfony/security-bundle": "5.1.*",
         "symfony/serializer": "5.1.*",
         "symfony/twig-pack": "^1.0",
@@ -62,8 +67,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "security-checker security:check": "script"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

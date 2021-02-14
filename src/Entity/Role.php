@@ -2,28 +2,36 @@
 
 namespace App\Entity;
 
-use App\Repository\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=RoleRepository::class)
+ * Role
+ *
+ * @ORM\Table(name="role")
+ * @ORM\Entity
  */
 class Role
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @var string
+     *
+     * @ORM\Column(name="role_name", type="string", length=100, nullable=false)
      */
     private $roleName;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=100, nullable=false)
      */
     private $libelle;
 
@@ -54,11 +62,6 @@ class Role
         $this->libelle = $libelle;
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->libelle;
     }
 
 

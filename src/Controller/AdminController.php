@@ -19,4 +19,11 @@ class AdminController extends AbstractController
         return $this->render("admin/main.html.twig");
     }
 
+    /**
+     * @Route("/extra",name="test_extra")
+     */
+    public function index2(){
+        return $this->render("admin/main.html.twig");
+    }
+
 }
